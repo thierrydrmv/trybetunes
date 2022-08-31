@@ -13,8 +13,6 @@ class App extends React.Component {
   state = {
     name: '',
     btnOn: true,
-    favorite: '',
-    btnFavorite: true,
   };
 
   handleName = ({ target }) => {
@@ -22,14 +20,6 @@ class App extends React.Component {
     this.setState({
       name: target.value,
       btnOn: (target.value.length < minlength),
-    });
-  };
-
-  handleSearch = ({ target }) => {
-    const minlength = 2;
-    this.setState({
-      favorite: target.value,
-      btnFavorite: (target.value.length < minlength),
     });
   };
 
@@ -47,13 +37,7 @@ class App extends React.Component {
                 handleName={ this.handleName }
               />) }
             />
-            <Route
-              path="/search"
-              render={ () => (<Search
-                { ...this.state }
-                handleSearch={ this.handleSearch }
-              />) }
-            />
+            <Route path="/search" component={ Search } />
             <Route path="/album/:id" component={ Album } />
             <Route path="/favorites" component={ Favorites } />
             <Route exact path="/profile" component={ Profile } />
