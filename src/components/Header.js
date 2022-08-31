@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
 
 export default class Header extends Component {
@@ -25,7 +26,10 @@ export default class Header extends Component {
     return (
       <header data-testid="header-component">
         {apiRequest ? <p>Carregando...</p>
-          : <p data-testid="header-user-name">{ user }</p>}
+          : <p data-testid="header-user-name">{`Bem vindo ${user} !`}</p>}
+        <Link data-testid="link-to-search" to="/search">Pesquisa</Link>
+        <Link data-testid="link-to-favorites" to="/favorites">Favoritos</Link>
+        <Link data-testid="link-to-profile" to="/profile">Perfil</Link>
       </header>
     );
   }
