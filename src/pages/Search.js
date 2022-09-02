@@ -6,15 +6,18 @@ export default class Search extends Component {
   state = {
     apiRequest: false,
     obj: [],
-    favorite: '',
-    btnFavorite: true,
+    artist: '',
+    backupArtist: '',
+    searchBtn: true,
+    loading: false,
   };
 
   handleSearch = ({ target }) => {
     const minlength = 2;
     this.setState({
-      favorite: target.value,
-      btnFavorite: (target.value.length < minlength),
+      artist: target.value,
+      backupArtist: target.value,
+      searchBtn: (target.value.length < minlength),
     });
   };
 
@@ -23,16 +26,26 @@ export default class Search extends Component {
     this.setState({
       apiRequest: true,
       obj: data,
+      loading: false,
     });
   };
 
+  handleButton = () => {
+    this.setState({
+      artist: '',
+      loading: true,
+    });
+    const { backupArtist } = this.state;
+    this.fetchApi(backupArtist);
+  };
+
   render() {
-    const { apiRequest, obj, btnFavorite, favorite } = this.state;
-    let render = <p>Carregando...</p>;
+    const { apiRequest, obj, searchBtn, artist, backupArtist, loading } = this.state;
+    let render;
     if (obj.length > 1) {
       render = (
         <div>
-          <p>{`Resultado de álbuns de: ${favorite}`}</p>
+          <p>{`Resultado de álbuns de:${backupArtist}`}</p>
           {
             obj.map(({ collectionId, artistName, artworkUrl100, collectionName }) => (
               <div key={ collectionId }>
@@ -54,20 +67,22 @@ export default class Search extends Component {
     }
     return (
       <div data-testid="page-search">
+        { loading && <p>Carregando...</p> }
         { apiRequest ? render
           : (
             <form>
               <input
                 data-testid="search-artist-input"
                 type="text"
+                value={ artist }
                 placeholder="Nome do Artista"
                 onChange={ this.handleSearch }
               />
               <button
                 data-testid="search-artist-button"
                 type="button"
-                disabled={ btnFavorite }
-                onClick={ () => this.fetchApi(favorite) }
+                disabled={ searchBtn }
+                onClick={ this.handleButton }
               >
                 Pesquisar
               </button>
