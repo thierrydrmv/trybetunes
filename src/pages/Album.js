@@ -16,11 +16,11 @@ export default class Album extends Component {
   fetchApi = async () => {
     const { match: { params: { id } } } = this.props;
     const data = await getMusics(id);
-    // const filtro = data.filter((song) => song.wrapperType.includes('track'));
     this.setState({
       obj: data,
       loading: false,
     });
+    console.log(data);
   };
 
   render() {
@@ -34,13 +34,12 @@ export default class Album extends Component {
               <h1 data-testid="artist-name">{obj[0].artistName}</h1>
               <p data-testid="album-name">{obj[0].collectionName}</p>
               {
-                obj.map(({ trackId, trackName, previewUrl, wrapperType }, index) => (
-                  wrapperType === 'track'
+                obj.map(({ trackId, trackName, previewUrl, kind }) => (
+                  kind
                   && (
                     <MusicCard
                       key={ trackId }
-                      index={ index }
-                      wrapperType={ wrapperType }
+                      trackId={ trackId }
                       trackName={ trackName }
                       previewUrl={ previewUrl }
                     />
