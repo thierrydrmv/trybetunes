@@ -100,6 +100,6 @@ MusicCard.propTypes = {
   previewUrl: PropTypes.string.isRequired,
   trackName: PropTypes.string.isRequired,
   trackId: PropTypes.number.isRequired,
-  favoriteSongs: PropTypes.func.isRequired,
+  favoriteSongs: PropTypes.arrayOf.isRequired,
   getFavoriteSongs: PropTypes.func.isRequired,
 };
