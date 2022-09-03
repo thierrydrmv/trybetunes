@@ -20,7 +20,6 @@ export default class Album extends Component {
       obj: data,
       loading: false,
     });
-    console.log(data);
   };
 
   render() {
@@ -34,14 +33,15 @@ export default class Album extends Component {
               <h1 data-testid="artist-name">{obj[0].artistName}</h1>
               <p data-testid="album-name">{obj[0].collectionName}</p>
               {
-                obj.map(({ trackId, trackName, previewUrl, kind }) => (
-                  kind
+                obj.map((element) => (
+                  element.kind
                   && (
                     <MusicCard
-                      key={ trackId }
-                      trackId={ trackId }
-                      trackName={ trackName }
-                      previewUrl={ previewUrl }
+                      element={ element }
+                      key={ element.trackId }
+                      trackId={ element.trackId }
+                      trackName={ element.trackName }
+                      previewUrl={ element.previewUrl }
                     />
                   )
                 ))

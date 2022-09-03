@@ -45,7 +45,7 @@ export default class Search extends Component {
     if (obj.length > 1) {
       render = (
         <div>
-          <p>{`Resultado de álbuns de:${backupArtist}`}</p>
+          <p>{`Resultado de álbuns de: ${backupArtist}`}</p>
           {
             obj.map(({ collectionId, artistName, artworkUrl100, collectionName }) => (
               <div key={ collectionId }>
