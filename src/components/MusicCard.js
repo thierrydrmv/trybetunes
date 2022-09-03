@@ -72,7 +72,7 @@ export default class MusicCard extends Component {
                       <code>audio</code>
                       .
                     </audio>
-                    <label htmlFor="favorite">
+                    <label htmlFor={ JSON.stringify(element) }>
                       Favorita
                       { checkbox ? <p>Carregando...</p>
                         : (
@@ -100,6 +100,10 @@ MusicCard.propTypes = {
   previewUrl: PropTypes.string.isRequired,
   trackName: PropTypes.string.isRequired,
   trackId: PropTypes.number.isRequired,
-  favoriteSongs: PropTypes.arrayOf.isRequired,
+  favoriteSongs: PropTypes.arrayOf(PropTypes.shape({})),
   getFavoriteSongs: PropTypes.func.isRequired,
+};
+
+MusicCard.defaultProps = {
+  favoriteSongs: [{}],
 };
