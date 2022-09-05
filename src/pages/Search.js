@@ -67,27 +67,25 @@ export default class Search extends Component {
     }
     return (
       <div data-testid="page-search">
+        <form>
+          <input
+            data-testid="search-artist-input"
+            type="text"
+            value={ artist }
+            placeholder="Nome do Artista"
+            onChange={ this.handleSearch }
+          />
+          <button
+            data-testid="search-artist-button"
+            type="button"
+            disabled={ searchBtn }
+            onClick={ this.handleButton }
+          >
+            Pesquisar
+          </button>
+        </form>
         { loading && <p>Carregando...</p> }
-        { apiRequest ? render
-          : (
-            <form>
-              <input
-                data-testid="search-artist-input"
-                type="text"
-                value={ artist }
-                placeholder="Nome do Artista"
-                onChange={ this.handleSearch }
-              />
-              <button
-                data-testid="search-artist-button"
-                type="button"
-                disabled={ searchBtn }
-                onClick={ this.handleButton }
-              >
-                Pesquisar
-              </button>
-            </form>
-          )}
+        { apiRequest && render }
       </div>
     );
   }

@@ -23,7 +23,10 @@ export default class Favorites extends Component {
     const data = await getFavoriteSongs();
     this.setState({
       songs: data,
-      loading: false,
+    }, () => {
+      this.setState({
+        loading: false,
+      });
     });
   };
 
