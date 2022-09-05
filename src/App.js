@@ -10,33 +10,13 @@ import NotFound from './pages/NotFound';
 import Header from './components/Header';
 
 class App extends React.Component {
-  state = {
-    name: '',
-    btnOn: true,
-  };
-
-  handleName = ({ target }) => {
-    const minlength = 3;
-    this.setState({
-      name: target.value,
-      btnOn: (target.value.length < minlength),
-    });
-  };
-
   render() {
     return (
       <div>
         <BrowserRouter>
           <Route path="/" component={ Header } />
           <Switch>
-            <Route
-              exact
-              path="/"
-              render={ () => (<Login
-                { ...this.state }
-                handleName={ this.handleName }
-              />) }
-            />
+            <Route exact path="/" component={ Login } />
             <Route path="/search" component={ Search } />
             <Route path="/album/:id" render={ (props) => <Album { ...props } /> } />
             <Route path="/favorites" component={ Favorites } />

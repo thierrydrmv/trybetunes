@@ -1,37 +1,35 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import { createUser } from '../services/userAPI';
 
 export default class Login extends Component {
   state = {
+    name: '',
+    btnOn: true,
     loading: true,
-    waitApi: false,
   };
 
-  handleChange = async () => {
-    const { name } = this.props;
+  handleName = ({ target }) => {
+    const minlength = 3;
+    this.setState({
+      name: target.value,
+      btnOn: (target.value.length < minlength),
+    });
+  };
+
+  handleClick = async () => {
+    const { name } = this.state;
+    const { history } = this.props;
     this.setState({
       loading: false,
     }, async () => {
       await createUser({ name });
-      this.setState({
-        waitApi: true,
-      });
+      history.push('/search');
     });
   };
 
-  redirectPage = () => {
-    const { waitApi } = this.state;
-    const value = <Redirect to="/search" />;
-    if (waitApi) {
-      return value;
-    }
-  };
-
   render() {
-    const { handleName, btnOn } = this.props;
-    const { loading } = this.state;
+    const { loading, btnOn } = this.state;
     return (
       <div data-testid="page-login">
         { loading ? (
@@ -40,26 +38,23 @@ export default class Login extends Component {
               type="text"
               data-testid="login-name-input"
               placeholder="Nome"
-              onChange={ handleName }
+              onChange={ this.handleName }
             />
             <button
               type="button"
               data-testid="login-submit-button"
               disabled={ btnOn }
-              onClick={ this.handleChange }
+              onClick={ this.handleClick }
             >
               Entrar
             </button>
           </form>
         ) : (<p>Carregando...</p>)}
-        { this.redirectPage() }
       </div>
     );
   }
 }
 
 Login.propTypes = {
-  handleName: PropTypes.func.isRequired,
-  btnOn: PropTypes.bool.isRequired,
-  name: PropTypes.string.isRequired,
+  history: PropTypes.arrayOf({}).isRequired,
 };
