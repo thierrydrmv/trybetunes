@@ -28,6 +28,9 @@ export default class Profile extends Component {
         {
           loading ? <h2>Loading...</h2> : (
             <div>
+              <button type="button">
+                <Link to="/profile/edit"><p>Editar perfil</p></Link>
+              </button>
               <div>
                 <h2>Nome</h2>
                 <p>{profileData.name}</p>
@@ -47,7 +50,6 @@ export default class Profile extends Component {
                   alt="Profile"
                 />
               </div>
-              <Link to="/profile/edit">Editar perfil</Link>
             </div>
           )
         }

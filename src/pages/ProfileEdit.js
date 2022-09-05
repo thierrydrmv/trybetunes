@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getUser, updateUser } from '../services/userAPI';
 
@@ -12,46 +11,44 @@ export default class ProfileEdit extends Component {
     description: '',
     image: '',
     btnOn: true,
-    waitApi: false,
   };
 
-  componentDidMount() {
-    this.fetchApi();
+  async componentDidMount() {
+    await this.fetchApi();
+    this.validate();
   }
 
   handleChange = ({ target }) => {
     const { name, value } = target;
-    this.setState({ [name]: value }, () => {
-      const { state } = this;
-      const min = 0;
-      const minLength = state.name.length > min && state.email.length > min
-      && state.description.length > min && state.image.length > min;
-      if (minLength) {
-        this.setState({
-          btnOn: false,
-        });
-      }
-    });
+    this.setState({ [name]: value }, this.validate());
   };
 
-  handleButton = async () => {
-    const { name, email, description, image } = this.props;
+  validate = () => {
+    const { state } = this;
+    const min = 0;
+    const minLength = state.name.length > min
+&& state.description.length > min && state.image.length > min;
+    const emailValid = /\S+@\S+\.\S+/.test(state.email);
+    if (minLength && emailValid) {
+      this.setState({
+        btnOn: false,
+      });
+    } else {
+      this.setState({
+        btnOn: true,
+      });
+    }
+  };
+
+  handleButton = () => {
+    const { name, email, description, image } = this.state;
+    const { history } = this.props;
     this.setState({
-      loading: false,
+      loading: true,
     }, async () => {
       await updateUser({ name, email, description, image });
-      this.setState({
-        waitApi: true,
-      });
+      history.push('/profile');
     });
-  };
-
-  redirectPage = () => {
-    const { waitApi } = this.state;
-    const value = <Redirect to="/profile" />;
-    if (waitApi) {
-      return value;
-    }
   };
 
   fetchApi = async () => {
@@ -123,27 +120,16 @@ export default class ProfileEdit extends Component {
                 disabled={ btnOn }
                 onClick={ this.handleButton }
               >
-                Salvar
+                Editar perfil
               </button>
             </form>
           )
         }
-        { this.redirectPage() }
       </div>
     );
   }
 }
 
 ProfileEdit.propTypes = {
-  name: PropTypes.string,
-  email: PropTypes.string,
-  description: PropTypes.string,
-  image: PropTypes.string,
-};
-
-ProfileEdit.defaultProps = {
-  name: '',
-  email: '',
-  description: '',
-  image: '',
+  history: PropTypes.arrayOf({}).isRequired,
 };

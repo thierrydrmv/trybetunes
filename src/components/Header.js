@@ -26,7 +26,7 @@ export default class Header extends Component {
     return (
       <header data-testid="header-component">
         {apiRequest ? <p>Carregando...</p>
-          : <p data-testid="header-user-name">{`Bem vindo ${user} !`}</p>}
+          : <p data-testid="header-user-name">{user}</p>}
         <Link data-testid="link-to-search" to="/search">Pesquisa</Link>
         <Link data-testid="link-to-favorites" to="/favorites">Favoritos</Link>
         <Link data-testid="link-to-profile" to="/profile">Perfil</Link>
