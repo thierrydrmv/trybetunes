@@ -13,8 +13,8 @@ export default class ProfileEdit extends Component {
     btnOn: true,
   };
 
-  async componentDidMount() {
-    await this.fetchApi();
+  componentDidMount() {
+    this.fetchApi();
     this.validate();
   }
 
@@ -40,15 +40,14 @@ export default class ProfileEdit extends Component {
     }
   };
 
-  handleButton = () => {
+  handleButton = async () => {
     const { name, email, description, image } = this.state;
     const { history } = this.props;
     this.setState({
       loading: true,
-    }, async () => {
-      await updateUser({ name, email, description, image });
-      history.push('/profile');
     });
+    await updateUser({ name, email, description, image });
+    history.push('/profile');
   };
 
   fetchApi = async () => {
@@ -56,14 +55,16 @@ export default class ProfileEdit extends Component {
     this.setState({
       loading: false,
       obj: data,
-    }, () => {
-      const { obj } = this.state;
-      this.setState({
-        name: obj.name ? obj.name : '',
-        email: obj.email ? obj.email : '',
-        description: obj.description ? obj.description : '',
-        image: obj.image ? obj.image : '',
-      });
+    }, () => this.getPerfilData());
+  };
+
+  getPerfilData = () => {
+    const { obj } = this.state;
+    this.setState({
+      name: obj.name ? obj.name : '',
+      email: obj.email ? obj.email : '',
+      description: obj.description ? obj.description : '',
+      image: obj.image ? obj.image : '',
     });
   };
 

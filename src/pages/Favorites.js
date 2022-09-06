@@ -6,32 +6,30 @@ export default class Favorites extends Component {
   state = {
     loading: true,
     songs: [],
+    remove: true,
   };
 
   componentDidMount() {
-    this.renderFavoriteSongs();
+    this.handleFavoriteSongs();
   }
 
   componentDidUpdate(_prevProps, prevState) {
     const { songs } = this.state;
     if (prevState.songs !== songs) {
-      this.renderFavoriteSongs();
+      this.handleFavoriteSongs();
     }
   }
 
-  renderFavoriteSongs = async () => {
+  handleFavoriteSongs = async () => {
     const data = await getFavoriteSongs();
     this.setState({
       songs: data,
-    }, () => {
-      this.setState({
-        loading: false,
-      });
+      loading: false,
     });
   };
 
   render() {
-    const { loading, songs } = this.state;
+    const { loading, songs, remove } = this.state;
     return (
       <div data-testid="page-favorites">
         <div>
@@ -46,6 +44,8 @@ export default class Favorites extends Component {
                   trackId={ element.trackId }
                   trackName={ element.trackName }
                   previewUrl={ element.previewUrl }
+                  handleFavoriteSongs={ this.handleFavoriteSongs }
+                  remove={ remove }
                 />
               ))
             )

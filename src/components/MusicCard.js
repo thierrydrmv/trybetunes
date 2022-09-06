@@ -4,10 +4,8 @@ import { addSong, removeSong } from '../services/favoriteSongsAPI';
 
 export default class MusicCard extends Component {
   state = {
-    loading: true,
-    renderFavorite: false,
+    loading: false,
     favorite: false,
-    checkbox: true,
   };
 
   componentDidMount() {
@@ -15,6 +13,9 @@ export default class MusicCard extends Component {
   }
 
   renderFavoriteSongs = async () => {
+    this.setState({
+      loading: true,
+    });
     const { getFavoriteSongs, trackId } = this.props;
     const data = await getFavoriteSongs();
     const render = data.map((e) => e.trackId)
@@ -25,69 +26,67 @@ export default class MusicCard extends Component {
       });
     }
     this.setState({
-      checkbox: false,
+      loading: false,
     });
   };
 
-  handleFavorite = async (event) => {
+  handleFavorite = async ({ target }) => {
     const { favoriteSongs } = this.props;
     const { favorite } = this.state;
+    const id = JSON.parse(target.id);
     this.setState({
-      renderFavorite: true,
+      loading: true,
       favorite: !favorite,
     }, async () => {
       const alreadyFav = favoriteSongs
         .map((song) => song.trackId)
-        .some((e) => e === parseInt(event.target.value, 10));
+        .some((e) => e === parseInt(target.value, 10));
       if (!alreadyFav && !favorite) {
-        await addSong(JSON.parse(event.target.id));
+        await addSong(id);
         this.setState({
-          renderFavorite: false,
+          loading: false,
         });
       } else {
-        await removeSong(JSON.parse(event.target.id));
-        this.setState({
-          renderFavorite: false,
-        });
+        this.handleRemoveSong(id);
       }
+    });
+  };
+
+  handleRemoveSong = async (id) => {
+    const { getFavoriteSongs } = this.props;
+    await removeSong(id);
+    await getFavoriteSongs();
+    this.setState({
+      loading: false,
     });
   };
 
   render() {
     const { trackName, previewUrl, element, trackId } = this.props;
-    const { loading, renderFavorite, favorite, checkbox } = this.state;
+    const { loading, favorite } = this.state;
     return (
       <div>
-        {!loading ? <p>Carregando...</p>
+        {loading ? <p>Carregando...</p>
           : (
             <div>
-              {
-                renderFavorite ? <p>Carregando...</p> : (
-                  <>
-                    <p>{trackName}</p>
-                    <audio data-testid="audio-component" src={ previewUrl } controls>
-                      <track kind="captions" />
-                      O seu navegador não suporta o elemento
-                      {' '}
-                      <code>audio</code>
-                      .
-                    </audio>
-                    <label htmlFor={ JSON.stringify(element) }>
-                      Favorita
-                      { checkbox ? <p>Carregando...</p>
-                        : (
-                          <input
-                            id={ JSON.stringify(element) }
-                            type="checkbox"
-                            onClick={ this.handleFavorite }
-                            data-testid={ `checkbox-music-${trackId}` }
-                            defaultChecked={ favorite }
-                          />
-                        )}
-                    </label>
-                  </>
-                )
-              }
+              <p>{trackName}</p>
+              <audio data-testid="audio-component" src={ previewUrl } controls>
+                <track kind="captions" />
+                O seu navegador não suporta o elemento
+                {' '}
+                <code>audio</code>
+                .
+              </audio>
+              <label htmlFor={ JSON.stringify(element) }>
+                Favorita
+                <input
+                  id={ JSON.stringify(element) }
+                  type="checkbox"
+                  onClick={ this.handleFavorite }
+                  data-testid={ `checkbox-music-${trackId}` }
+                  defaultChecked={ favorite }
+                />
+              </label>
             </div>) }
       </div>
     );

@@ -31,7 +31,7 @@ export default class Album extends Component {
     return (
 
       <div data-testid="page-album">
-        { loading ? <p>Carregando...</p>
+        { loading ? <h1>Carregando...</h1>
           : (
             <>
               <h1 data-testid="artist-name">{songs[0].artistName}</h1>
