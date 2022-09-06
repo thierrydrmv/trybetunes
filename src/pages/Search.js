@@ -41,9 +41,9 @@ export default class Search extends Component {
 
   render() {
     const { apiRequest, obj, searchBtn, artist, backupArtist, loading } = this.state;
-    let render;
-    if (obj.length > 1) {
-      render = (
+    let apiAnswer;
+    if (apiRequest && obj.length > 1) {
+      apiAnswer = (
         <div>
           <p>{`Resultado de álbuns de: ${backupArtist}`}</p>
           {
@@ -62,8 +62,8 @@ export default class Search extends Component {
             ))
           }
         </div>);
-    } else {
-      render = <h2>Nenhum álbum foi encontrado</h2>;
+    } else if (apiRequest) {
+      apiAnswer = <h2>Nenhum álbum foi encontrado</h2>;
     }
     return (
       <div data-testid="page-search">
@@ -84,8 +84,7 @@ export default class Search extends Component {
             Pesquisar
           </button>
         </form>
-        { loading && <p>Carregando...</p> }
-        { apiRequest && render }
+        { loading ? <p>Carregando...</p> : apiAnswer}
       </div>
     );
   }
