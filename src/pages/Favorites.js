@@ -6,7 +6,6 @@ export default class Favorites extends Component {
   state = {
     loading: true,
     songs: [],
-    remove: true,
   };
 
   componentDidMount() {
@@ -29,7 +28,7 @@ export default class Favorites extends Component {
   };
 
   render() {
-    const { loading, songs, remove } = this.state;
+    const { loading, songs } = this.state;
     return (
       <div data-testid="page-favorites">
         <div>
@@ -45,7 +44,6 @@ export default class Favorites extends Component {
                   trackName={ element.trackName }
                   previewUrl={ element.previewUrl }
                   handleFavoriteSongs={ this.handleFavoriteSongs }
-                  remove={ remove }
                 />
               ))
             )
